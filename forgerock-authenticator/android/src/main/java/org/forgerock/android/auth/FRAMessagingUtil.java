@@ -167,15 +167,15 @@ class FRAMessagingUtil {
     }
 
     private static String getTitle(Context context, PushNotification pushNotification) {
-        if (pushNotification.getMessage() != null) {
-            return pushNotification.getMessage();
-        } else {
+//        if (pushNotification.getMessage() != null) {
+//            return pushNotification.getMessage();
+//        } else {
             Mechanism mechanism = FRAClientWrapper
                     .getInstanceInBackground(context)
                     .getMechanism(pushNotification);
             return String.format(context.getString(R.string.system_notification_title),
                     mechanism.getAccountName(), mechanism.getIssuer());
-        }
+        //}
     }
 
     private static String getBody(Context context, PushNotification pushNotification) {

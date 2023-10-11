@@ -255,6 +255,22 @@ class ForgerockAuthenticator {
     return count;
   }
 
+  static Future<Mechanism?> getMechanism(String mechanismUID) async {
+    try {
+      var mechanismMap =
+      await _channel.invokeMethod('getAllMechanismsGroupByUID');
+          if (mechanismMap.isNotEmpty) {
+            final mechanismJson = mechanismMap[mechanismUID];
+            if (mechanismJson != null) {
+              return Mechanism.fromJson(_getPlatformData(mechanismJson));
+            }
+          }
+      return null;
+    } on PlatformException catch (ex) {
+      throw ex;
+    }
+  }
+
   /// Get single list of notifications across all mechanisms.
   /// Returns `null` if no [PushNotification] could be found.
   static Future<List<PushNotification>> getAllNotifications() async {

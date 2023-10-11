@@ -1,0 +1,8 @@
+<resources>
+    <!-- System notifications-->
+    <string name="system_notification_title">Tentative de connexion pour %1$s sur %2$s</string>
+    <string name="system_notification_body">Appuyez pour vous connecter</string>
+    <string name="system_notification_body_with_actions">Utilisez les boutons pour accepter ou rejeter la demande</string>
+    <string name="system_notification_action_approve">Accepter</string>
+    <string name="system_notification_action_deny">Refuser</string>
+</resources>
