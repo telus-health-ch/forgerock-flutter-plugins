@@ -210,6 +210,7 @@ open class FRAClientWrapper {
         let aps = userInfo["aps"] as! [String: Any]
         let messageId = aps["messageId"] as! String
 
+
         var pushNotification : PushNotification? = self.getNotificationByMessageId(messageId: messageId)
 
         if(pushNotification == nil) {
