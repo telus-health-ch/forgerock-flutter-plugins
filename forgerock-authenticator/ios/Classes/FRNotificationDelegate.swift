@@ -40,6 +40,8 @@ extension FRAppDelegate: UNUserNotificationCenterDelegate {
         application.registerForRemoteNotifications()
 
         let locale = Locale.preferredLanguages[0]
+        // Localization solution softly speaking is far-far from at least acceptable. Should talk to library developers to ask them add localization possibilities to original lib.
+        // TODO: Replace with NSLocalization
         // register notification categories
         let acceptAction = UNNotificationAction(
             identifier: UserNotificationAction.ACCEPT_ACTION.rawValue,
