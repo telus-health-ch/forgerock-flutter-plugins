@@ -39,15 +39,16 @@ extension FRAppDelegate: UNUserNotificationCenterDelegate {
         }
         application.registerForRemoteNotifications()
 
+        let locale = Locale.preferredLanguages[0]
         // register notification categories
         let acceptAction = UNNotificationAction(
             identifier: UserNotificationAction.ACCEPT_ACTION.rawValue,
-            title: NSLocalizedString("Accept", comment: "Accept the authentocation request"),
+            title: NSLocalizedString(locale.contains("fr") ? "Accepter" : "Accept", comment: locale.contains("fr") ? "Accepter" : "Accept"),
             options: [.foreground])
 
         let declineAction = UNNotificationAction(
             identifier: UserNotificationAction.DECLINE_ACTION.rawValue,
-            title: NSLocalizedString("Reject", comment: "Reject the authentocation request"),
+            title: NSLocalizedString(locale.contains("fr") ? "Refuser" : "Reject", comment: locale.contains("fr") ? "Refuser" : "Reject"),
             options: [.foreground])
 
         let authenticationCategory = UNNotificationCategory(
