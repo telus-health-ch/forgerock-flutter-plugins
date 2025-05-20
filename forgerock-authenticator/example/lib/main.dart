@@ -6,10 +6,9 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'package:forgerock_authenticator_example/providers/authenticator_provider.dart';
 import 'package:forgerock_authenticator_example/screens/home_screen.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -6,70 +6,73 @@
  */
 
 import 'package:flutter/material.dart';
-
 import 'package:forgerock_authenticator/models/account.dart';
-
-import 'account_detail.dart';
-import 'account_logo.dart';
-import 'account_list_tile.dart';
-import 'delete_account_dialog.dart';
+import 'package:forgerock_authenticator_example/widgets/account_detail.dart';
+import 'package:forgerock_authenticator_example/widgets/account_list_tile.dart';
+import 'package:forgerock_authenticator_example/widgets/account_logo.dart';
+import 'package:forgerock_authenticator_example/widgets/delete_account_dialog.dart';
 
 /// The [AccountCard] widget reprentes an [Account] registered with the SDK. This
 /// sample does not cover an Account with both OATH and PUSH mechanisms.
 class AccountCard extends StatelessWidget {
-  final Key key;
   final Account account;
   final bool edit;
 
-  AccountCard(this.key, this.account, this.edit);
+  const AccountCard(this.account, this.edit, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return AccountListTile(
       leading: AccountLogo(
-                  imageURL: account.imageURL,
-                  textFallback: account.issuer,
-                ),
-      title: account.issuer,
-      subtitle: account.accountName,
+        imageURL: account.imageURL ?? '',
+        textFallback: account.issuer ?? '',
+      ),
+      title: account.issuer ?? '',
+      subtitle: account.accountName ?? '',
       trailing: edit ? _deleteButton(context) : _emptyContainer(),
       child: edit ? _emptyContainer() : _accountDetail(),
     );
   }
 
   Widget _deleteButton(BuildContext context) {
-    return Expanded(child: Align(
-      alignment: Alignment.bottomRight,
-      child:
-      Padding(
-        padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-        child: IconButton(
-          icon: Icon(
-            Icons.delete,
-            color: Colors.grey,
-            size: 28.0,
-          ),
-          onPressed: () {
-            deleteAccount(context, account.id);
-          },
-        )
-      )
-    ));
+    return Expanded(
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+          child: IconButton(
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.grey,
+                size: 28.0,
+              ),
+              onPressed: account.id != null
+                  ? () {
+                      deleteAccount(context, account.id!);
+                    }
+                  : null),
+        ),
+      ),
+    );
   }
 
   Widget _emptyContainer() {
-    return Container(height: 0, width: 0,);
+    return const SizedBox(
+      height: 0,
+      width: 0,
+    );
   }
 
   Widget _accountDetail() {
-    if (account.lock) {
+    if (account.lock == true) {
       return SizedBox(
         width: 230,
-        child: Text('Your account is locked due the policy: ' + account.lockingPolicy,
+        child: Text(
+          'Your account is locked due the policy: ${account.lockingPolicy}',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
       );
     } else {
@@ -79,6 +82,4 @@ class AccountCard extends StatelessWidget {
       );
     }
   }
-
 }
-

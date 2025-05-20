@@ -5,9 +5,9 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import 'account.dart';
-import 'push_mechanism.dart';
-import 'oath_mechanism.dart';
+import 'package:forgerock_authenticator/models/account.dart';
+import 'package:forgerock_authenticator/models/oath_mechanism.dart';
+import 'package:forgerock_authenticator/models/push_mechanism.dart';
 
 class Mechanism {
   String? id;
@@ -69,6 +69,6 @@ class Mechanism {
 
   /// Gets the [Account] object associated with the mechanism.
   Account? getAccount() {
-    return this.account;
+    return account;
   }
 }

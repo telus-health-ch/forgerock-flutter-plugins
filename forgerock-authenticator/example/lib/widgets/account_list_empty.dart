@@ -13,11 +13,10 @@ class AccountEmptyList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(vertical: 20.0),
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
       child: Column(
         children: <Widget>[
           Flexible(
-            flex: 1,
             fit: FlexFit.tight,
             child: Icon(
                 Icons.account_circle,
@@ -29,12 +28,12 @@ class AccountEmptyList extends StatelessWidget {
             flex: 2,
             fit: FlexFit.tight,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Column(
-                children: <Widget>[
+                children: const <Widget>[
                   Text(
                     'No accounts!',
-                    key: const Key('header'),
+                    key: Key('header'),
                     style: TextStyle(
                       fontSize: 46.0,
                       fontWeight: FontWeight.w300,
@@ -42,7 +41,7 @@ class AccountEmptyList extends StatelessWidget {
                       height: 2.0)),
                   Text(
                     'Register your first account using the camera to scan a QRCode',
-                    key: const Key('description'),
+                    key: Key('description'),
                     style: TextStyle(
                       color: Colors.grey,
                       letterSpacing: 1.2,

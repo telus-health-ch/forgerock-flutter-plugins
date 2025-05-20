@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'account_circle_avatar.dart';
+import 'package:forgerock_authenticator_example/widgets/account_circle_avatar.dart';
 
 /// The [AccountLogo] widget displays the logo associated with an [Account]. If
 /// this is not available it creates a [AccountCircleAvatar].
@@ -16,11 +16,11 @@ class AccountLogo extends StatelessWidget {
   final String imageURL;
   final String textFallback;
 
-  const AccountLogo({Key key, this.imageURL, this.textFallback}) : super(key: key);
+  const AccountLogo({super.key, required this.imageURL, required this.textFallback});
 
   @override
   Widget build(BuildContext context) {
-    if(imageURL == null || imageURL.trim().isEmpty) {
+    if(imageURL.trim().isEmpty) {
       return AccountCircleAvatar(text: textFallback);
     } else {
       return Image.network(

@@ -7,32 +7,33 @@
 
 import 'package:flutter/material.dart';
 
-
 class DefaultButton extends StatelessWidget {
-
   final VoidCallback action;
   final String text;
   final Color color;
 
-  const DefaultButton({Key key, this.action, this.text, this.color}) : super(key: key);
+  const DefaultButton({
+    super.key,
+    required this.action,
+    required this.text,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        key: key,
-        style: ElevatedButton.styleFrom(
-          primary: color,
-          onPrimary: Colors.white,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32.0)),
-          minimumSize: const Size(150, 50),
-        ),
-        onPressed: action,
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 16),
-        )
+      key: key,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32.0)),
+        minimumSize: const Size(150, 50),
+      ),
+      onPressed: action,
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 16),
+      ),
     );
   }
-
 }

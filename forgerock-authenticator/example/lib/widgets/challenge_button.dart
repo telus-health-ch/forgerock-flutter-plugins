@@ -7,33 +7,34 @@
 
 import 'package:flutter/material.dart';
 
-
 class ChallengeButton extends StatelessWidget {
-
   final VoidCallback action;
   final String text;
 
-  const ChallengeButton({Key key, this.action, this.text}) : super(key: key);
+  const ChallengeButton({
+    super.key,
+    required this.action,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
       child: ElevatedButton(
         key: key,
         style: ElevatedButton.styleFrom(
-          primary: Colors.grey,
-          onPrimary: Colors.white,
-          shape: CircleBorder(),
+          backgroundColor: Colors.grey,
+          foregroundColor: Colors.white,
+          shape: const CircleBorder(),
           minimumSize: const Size(65, 65),
         ),
         onPressed: action,
         child: Text(
           text,
           style: const TextStyle(fontSize: 20),
-        )
-      )
+        ),
+      ),
     );
   }
-
 }

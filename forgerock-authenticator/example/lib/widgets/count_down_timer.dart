@@ -12,14 +12,14 @@ import 'package:flutter/material.dart';
 /// This widget creates a circular container with a countdown with duration in
 /// seconds.
 class CountDownTimer extends StatefulWidget {
-
   const CountDownTimer({
-    Key key,
-    this.timeRemaining,
-    this.onComplete,
-    this.width,
-    this.height,
-    this.timeTotal}) : super(key: key);
+    super.key,
+    required this.timeRemaining,
+    required this.onComplete,
+    required this.width,
+    required this.height,
+    required this.timeTotal,
+  });
 
   final int timeTotal;
   final int timeRemaining;
@@ -32,8 +32,8 @@ class CountDownTimer extends StatefulWidget {
 }
 
 class CountDownTimerState extends State<CountDownTimer> {
-  Timer _timer;
-  int _start;
+  late Timer _timer;
+  late int _start;
 
   @override
   void initState() {
@@ -57,25 +57,26 @@ class CountDownTimerState extends State<CountDownTimer> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.white,
-        border: Border.all(width: 4, color: Colors.grey[400])
+        border: Border.all(
+          width: 4,
+          color: Colors.grey[400]!,
+        ),
       ),
-      child: Center(child: Text(
-        '$_start',
-        textScaleFactor: 1.0,
-        style: TextStyle(
+      child: Center(
+        child: Text(
+          '$_start',
+          style: TextStyle(
             fontSize: 15.0,
-            color: _start > (widget.timeRemaining / 3)
-                ? Colors.grey
-                : Colors.red,
-            fontWeight: FontWeight.bold),
+            color: _start > (widget.timeRemaining / 3) ? Colors.grey : Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-    ));
+    );
   }
 
   void _onComplete() {
-    if (widget.onComplete != null) {
-      widget.onComplete();
-    }
+    widget.onComplete();
     setState(() {
       _start = widget.timeTotal;
       _startTimer();
@@ -84,7 +85,9 @@ class CountDownTimerState extends State<CountDownTimer> {
 
   void _startTimer() {
     const Duration oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(oneSec, (Timer timer) {
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
         if (_start == 0) {
           setState(() {
             timer.cancel();
@@ -98,5 +101,4 @@ class CountDownTimerState extends State<CountDownTimer> {
       },
     );
   }
-
 }

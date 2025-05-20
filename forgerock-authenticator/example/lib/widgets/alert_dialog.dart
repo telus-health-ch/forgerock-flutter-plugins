@@ -8,13 +8,13 @@
 import 'package:flutter/material.dart';
 
 /// Displays an modal with the supplied title and message.
-Future<Null> alert(BuildContext context, String title, String message) =>
+Future<void> alert(BuildContext context, String title, String message) =>
     showDialog(
         context: context,
         builder: (var context) => AlertDialog(
           title: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
             ),
           ),
@@ -23,7 +23,7 @@ Future<Null> alert(BuildContext context, String title, String message) =>
               children: <Widget>[
                 Text(
                   message,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                   ),
                 ),
@@ -32,7 +32,7 @@ Future<Null> alert(BuildContext context, String title, String message) =>
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

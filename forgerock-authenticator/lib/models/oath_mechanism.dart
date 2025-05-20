@@ -7,8 +7,8 @@
 
 import 'dart:convert';
 
-import 'account.dart';
-import 'mechanism.dart';
+import 'package:forgerock_authenticator/models/account.dart';
+import 'package:forgerock_authenticator/models/mechanism.dart';
 
 enum TokenType { HOTP, TOTP }
 
@@ -72,6 +72,7 @@ class OathMechanism extends Mechanism {
   }
 
   /// Creates a JSON string representation of [OathMechanism] object.
+  @override
   Map<String, dynamic> toJson() => {
         'id': id,
         'issuer': issuer,
@@ -88,5 +89,6 @@ class OathMechanism extends Mechanism {
       };
 
   /// Creates a String representation of [OathMechanism] object.
+  @override
   String toString() => jsonEncode(toJson());
 }

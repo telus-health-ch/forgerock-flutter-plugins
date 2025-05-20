@@ -7,7 +7,7 @@
 
 import 'dart:convert';
 
-import 'oath_mechanism.dart';
+import 'package:forgerock_authenticator/models/oath_mechanism.dart';
 
 /// Represents a currently active OTP token.
 class OathTokenCode {
@@ -21,13 +21,13 @@ class OathTokenCode {
     this.code = code;
     this.start = start;
     this.until = until;
-    this.oathType = tokenType;
+    oathType = tokenType;
   }
 
   /// Deserializes the specified JSON into an [OathTokenCode] object.
   factory OathTokenCode.fromJson(Map<String, dynamic>? json) {
-    String type = json?['oathType'];
-    var oathType =
+    final String type = json?['oathType'];
+    final oathType =
         type.toUpperCase() == 'HOTP' ? TokenType.HOTP : TokenType.TOTP;
 
     return OathTokenCode(
@@ -43,5 +43,6 @@ class OathTokenCode {
       };
 
   /// Creates a String representation of [OathTokenCode] object.
+  @override
   String toString() => jsonEncode(toJson());
 }

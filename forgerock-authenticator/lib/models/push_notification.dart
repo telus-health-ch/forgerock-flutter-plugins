@@ -7,10 +7,9 @@
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 
-import 'push_mechanism.dart';
-import 'push_type.dart';
+import 'package:forgerock_authenticator/models/push_mechanism.dart';
+import 'package:forgerock_authenticator/models/push_type.dart';
 
 /// PushNotification is a model class which represents a message that was received from an external
 /// source.
@@ -50,8 +49,8 @@ class PushNotification {
 
   /// Deserializes the specified JSON into an object of the [PushNotification] object.
   factory PushNotification.fromJson(Map<String, dynamic>? json) {
-    String pushType =
-        json?['pushType'] == null ? PushType.DEFAULT.value : json?['pushType'];
+    final String pushType =
+        json?['pushType'] ?? PushType.DEFAULT.value;
     return PushNotification(
         json?['mechanismUID'],
         json?['messageId'],
@@ -92,15 +91,15 @@ class PushNotification {
   /// If no context information is available, return an empty Map.
   Map<String, dynamic>? getContextInfo() {
     if (contextInfo == null) {
-      return Map();
+      return <String, dynamic>{};
     }
     return jsonDecode(contextInfo!);
   }
 
   /// Determine if the notification has expired.
   bool isExpired() {
-    var now = DateTime.now();
-    var expiredDate = DateTime.fromMillisecondsSinceEpoch(timeExpired!);
+    final now = DateTime.now();
+    final expiredDate = DateTime.fromMillisecondsSinceEpoch(timeExpired!);
     return expiredDate.isBefore(now);
   }
 
@@ -123,6 +122,7 @@ class PushNotification {
       };
 
   /// Creates a String representation of [PushNotification] object.
+  @override
   String toString() => jsonEncode(toJson());
 
   /// Gets the Unique identifier for PushNotification object associated with the mechanism

@@ -7,8 +7,8 @@
 
 import 'dart:convert';
 
-import 'account.dart';
-import 'mechanism.dart';
+import 'package:forgerock_authenticator/models/account.dart';
+import 'package:forgerock_authenticator/models/mechanism.dart';
 
 /// Represents an instance of a Push authentication mechanism. Associated with an [Account].
 class PushMechanism extends Mechanism {
@@ -50,6 +50,7 @@ class PushMechanism extends Mechanism {
   }
 
   /// Creates a JSON string representation of [PushMechanism] object.
+  @override
   Map<String, dynamic> toJson() => {
         'id': id,
         'issuer': issuer,
@@ -62,5 +63,6 @@ class PushMechanism extends Mechanism {
       };
 
   /// Creates a String representation of [PushMechanism] object.
+  @override
   String toString() => jsonEncode(toJson());
 }

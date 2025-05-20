@@ -12,14 +12,14 @@ class AccountCircleAvatar extends StatelessWidget {
 
   final String text;
 
-  const AccountCircleAvatar({Key key, this.text}) : super(key: key);
+  const AccountCircleAvatar({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
       backgroundColor: Colors.grey,
       child: Text(text.substring(0,1),
-        style: TextStyle(
+        style: const TextStyle(
             fontSize: 24,
             color: Colors.white,
             fontWeight: FontWeight.bold

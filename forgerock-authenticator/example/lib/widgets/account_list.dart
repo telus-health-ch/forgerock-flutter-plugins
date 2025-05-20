@@ -6,16 +6,13 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:forgerock_authenticator_example/providers/authenticator_provider.dart';
+import 'package:forgerock_authenticator_example/widgets/account_card.dart';
 import 'package:forgerock_authenticator_example/widgets/account_list_empty.dart';
 import 'package:provider/provider.dart';
 
-import 'package:forgerock_authenticator_example/providers/authenticator_provider.dart';
-
-import 'account_card.dart';
-
 /// The [AccountList] widget list all accounts registered with the SDK.
 class AccountList extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthenticatorProvider>(
@@ -25,17 +22,16 @@ class AccountList extends StatelessWidget {
             itemCount: authenticatorProvider.accounts.length,
             itemBuilder: (context, index) {
               return AccountCard(
-                ValueKey(authenticatorProvider.accounts[index].id),
                 authenticatorProvider.accounts[index],
-                false
+                false,
+                key: ValueKey(authenticatorProvider.accounts[index].id),
               );
             },
           );
         } else {
           return AccountEmptyList();
         }
-      }
+      },
     );
   }
-
 }

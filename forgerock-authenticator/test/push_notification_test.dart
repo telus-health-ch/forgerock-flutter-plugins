@@ -17,7 +17,7 @@ void main() {
 
   group('PushNotification tests', () {
     test('returns a PushNotification if parse completes successfully', () async {
-      PushNotification pushNotification = PushNotification.fromJson(jsonDecode(pushNotificationJson));
+      final PushNotification pushNotification = PushNotification.fromJson(jsonDecode(pushNotificationJson));
       expect(pushNotification.id, '0585ace6-6e91-42bb-9a65-2f48f5212a20-100000');
       expect(pushNotification.mechanismUID, '0585ace6-6e91-42bb-9a65-2f48f5212a20');
       expect(pushNotification.messageId, 'AUTHENTICATE:63ca6f18-7cfb-4198-bcd0-ac5041fbbea01583798229441');
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('returns a PushNotification if parse completes successfully for CHALLENGE type', () async {
-      PushNotification pushNotification = PushNotification.fromJson(jsonDecode(challengePushNotificationJson));
+      final PushNotification pushNotification = PushNotification.fromJson(jsonDecode(challengePushNotificationJson));
       expect(pushNotification.id, '0c43c695-8d67-47f1-b575-1c7a83512060-1657238273273');
       expect(pushNotification.mechanismUID, '0c43c695-8d67-47f1-b575-1c7a83512060');
       expect(pushNotification.messageId, 'AUTHENTICATE:2b43a378-0013-4589-8e81-118be10559ac1657238273273');
@@ -43,7 +43,7 @@ void main() {
     });
 
     test('returns a PushNotification if parse completes successfully for BIOMETRIC type', () async {
-      PushNotification pushNotification = PushNotification.fromJson(jsonDecode(biometricPushNotificationJson));
+      final PushNotification pushNotification = PushNotification.fromJson(jsonDecode(biometricPushNotificationJson));
       expect(pushNotification.id, '0c43c695-8d67-47f1-b575-1c7a83512060-1657238273273');
       expect(pushNotification.mechanismUID, '0c43c695-8d67-47f1-b575-1c7a83512060');
       expect(pushNotification.messageId, 'AUTHENTICATE:2b43a378-0013-4589-8e81-118be10559ac1657238273273');
@@ -55,15 +55,15 @@ void main() {
     });
 
     test('returns List with number challenges', () async {
-      PushNotification pushNotification = PushNotification.fromJson(jsonDecode(challengePushNotificationJson));
+      final PushNotification pushNotification = PushNotification.fromJson(jsonDecode(challengePushNotificationJson));
       expect(pushNotification.getNumbersChallenge()?.elementAt(0), '27');
       expect(pushNotification.getNumbersChallenge()?.elementAt(1), '64');
       expect(pushNotification.getNumbersChallenge()?.elementAt(2), '71');
     });
 
     test('returns contextual information as a Map', () async {
-      PushNotification pushNotification = PushNotification.fromJson(jsonDecode(challengePushNotificationJson));
-      Map<String, dynamic>? contextInfo = pushNotification.getContextInfo();
+      final PushNotification pushNotification = PushNotification.fromJson(jsonDecode(challengePushNotificationJson));
+      final Map<String, dynamic>? contextInfo = pushNotification.getContextInfo();
       expect(contextInfo?['remoteIp'], '192.168.1.1');
       expect(contextInfo?['location']['latitude'], 49.2306432);
       expect(contextInfo?['location']['longitude'], -123.1126528);
@@ -71,7 +71,7 @@ void main() {
     });
 
     test('returns an JSON representation of the PushNotification object successfully', () async {
-      PushNotification pushNotification = PushNotification.fromJson(jsonDecode(pushNotificationJson));
+      final PushNotification pushNotification = PushNotification.fromJson(jsonDecode(pushNotificationJson));
       final Map<String, dynamic> jsonMap = pushNotification.toJson();
       expect(jsonMap['id'], '0585ace6-6e91-42bb-9a65-2f48f5212a20-100000');
       expect(jsonMap['mechanismUID'], '0585ace6-6e91-42bb-9a65-2f48f5212a20');
@@ -82,7 +82,7 @@ void main() {
     });
 
     test('returns true when PushNotification is expired', () async {
-      PushNotification pushNotification = PushNotification.fromJson(jsonDecode(pushNotificationJson));
+      final PushNotification pushNotification = PushNotification.fromJson(jsonDecode(pushNotificationJson));
       final Map<String, dynamic> jsonMap = pushNotification.toJson();
       expect(jsonMap['id'], '0585ace6-6e91-42bb-9a65-2f48f5212a20-100000');
       expect(jsonMap['mechanismUID'], '0585ace6-6e91-42bb-9a65-2f48f5212a20');
@@ -118,7 +118,7 @@ void main() {
     });
 
     test('returns String representation of the PushNotification', () async {
-      PushNotification pushNotification = PushNotification.fromJson(jsonDecode(pushNotificationJson));
+      final PushNotification pushNotification = PushNotification.fromJson(jsonDecode(pushNotificationJson));
       const String pushNotificationString = '{"id":"0585ace6-6e91-42bb-9a65-2f48f5212a20-100000","mechanismUID":"0585ace6-6e91-42bb-9a65-2f48f5212a20","messageId":"AUTHENTICATE:63ca6f18-7cfb-4198-bcd0-ac5041fbbea01583798229441","challenge":"fZl8wu9JBxdRQ7miq3dE0fbF0Bcdd+gRETUbtl6qSuM=","amlbCookie":"ZnJfc3NvX2FtbGJfcHJvZD0wMQ==","timeAdded":100000,"timeExpired":120000,"ttl":120,"approved":false,"pending":true,"customPayload":null,"numbersChallenge":null,"contextInfo":null,"pushType":"default"}';
       expect(pushNotification.toString(), pushNotificationString);
     });

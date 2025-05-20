@@ -7,9 +7,9 @@
 
 import 'dart:convert';
 
-import 'oath_mechanism.dart';
-import 'push_mechanism.dart';
-import 'mechanism.dart';
+import 'package:forgerock_authenticator/models/mechanism.dart';
+import 'package:forgerock_authenticator/models/oath_mechanism.dart';
+import 'package:forgerock_authenticator/models/push_mechanism.dart';
 
 /// Account model represents an identity for the user with an issuer. It is possible for a user to
 /// have multiple accounts provided by a single issuer, however it is not possible to have multiple
@@ -46,7 +46,7 @@ class Account {
   /// Deserializes the specified Json into an object of the [Account] object.
   /// This account object may include a list of [Mechanism]
   factory Account.fromJson(Map<String, dynamic> json) {
-    Account account = Account(
+    final Account account = Account(
         json['id'],
         json['issuer'],
         json['displayIssuer'],
@@ -57,7 +57,7 @@ class Account {
         json['timeAdded'],
         json['policies'] == 'null' ? null : json['policies'],
         json['lockingPolicy'] == 'null' ? null : json['lockingPolicy'],
-        json['lock'] == null ? false : json['lock']);
+        json['lock'] ?? false);
 
     if (json['mechanismList'] != null) {
       List? toParseList;
@@ -67,14 +67,14 @@ class Account {
         toParseList = json['mechanismList'];
       }
 
-      List<Mechanism> mechanismList = [];
+      final List<Mechanism> mechanismList = [];
       for (final element in toParseList!) {
         if (element is String) {
           mechanismList.add(Mechanism.fromJson(jsonDecode(element), account));
         } else if (element is Map<String, dynamic>) {
           mechanismList.add(Mechanism.fromJson(element, account));
         } else {
-          var tmp = Map<String, dynamic>.from(element);
+          final tmp = Map<String, dynamic>.from(element);
           mechanismList.add(Mechanism.fromJson(tmp, account));
         }
       }
@@ -86,13 +86,13 @@ class Account {
 
   /// Creates a JSON string representation of [Account] object.
   Map<String, dynamic> toJson() {
-    List<String> list = [];
+    final List<String> list = [];
     if (mechanismList != null) {
       for (final element in mechanismList!) {
         list.add(jsonEncode(element.toJson()));
       }
     }
-    Map<String, dynamic> jsonMap = {
+    final Map<String, dynamic> jsonMap = {
       'id': id,
       'issuer': issuer,
       'displayIssuer': displayIssuer,
@@ -111,23 +111,23 @@ class Account {
 
   /// Gets the name of the IDP that issued this account.
   String? getIssuer() {
-    if (this.displayIssuer != "null" &&
-        this.displayIssuer != null &&
-        this.displayIssuer!.isNotEmpty) {
-      return this.displayIssuer;
+    if (displayIssuer != "null" &&
+        displayIssuer != null &&
+        displayIssuer!.isNotEmpty) {
+      return displayIssuer;
     } else {
-      return this.issuer;
+      return issuer;
     }
   }
 
   /// Gets the name of the account.
   String? getAccountName() {
-    if (this.displayAccountName != "null" &&
-        this.displayAccountName != null &&
-        this.displayAccountName!.isNotEmpty) {
-      return this.displayAccountName;
+    if (displayAccountName != "null" &&
+        displayAccountName != null &&
+        displayAccountName!.isNotEmpty) {
+      return displayAccountName;
     } else {
-      return this.accountName;
+      return accountName;
     }
   }
 
@@ -137,7 +137,7 @@ class Account {
       return null;
     }
 
-    for (Mechanism mechanism in mechanismList!) {
+    for (final Mechanism mechanism in mechanismList!) {
       if (mechanism.type == Mechanism.OATH) {
         return mechanism as OathMechanism?;
       }
@@ -156,7 +156,7 @@ class Account {
       return null;
     }
 
-    for (Mechanism mechanism in mechanismList!) {
+    for (final Mechanism mechanism in mechanismList!) {
       if (mechanism.type == Mechanism.PUSH) {
         return mechanism as PushMechanism?;
       }
@@ -175,5 +175,6 @@ class Account {
   }
 
   /// Creates a String representation of [Account] object.
+  @override
   String toString() => jsonEncode(toJson());
 }

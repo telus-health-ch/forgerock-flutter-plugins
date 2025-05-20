@@ -10,11 +10,11 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import 'models/account.dart';
-import 'models/mechanism.dart';
-import 'models/oath_token_code.dart';
-import 'models/push_mechanism.dart';
-import 'models/push_notification.dart';
+import 'package:forgerock_authenticator/models/account.dart';
+import 'package:forgerock_authenticator/models/mechanism.dart';
+import 'package:forgerock_authenticator/models/oath_token_code.dart';
+import 'package:forgerock_authenticator/models/push_mechanism.dart';
+import 'package:forgerock_authenticator/models/push_notification.dart';
 
 /// The [ForgerockAuthenticator] entry point. Represents the Authenticator module of the ForgeRock
 /// Mobile SDK. It is the front facing class where the methods available in the SDK can be
@@ -50,8 +50,8 @@ class ForgerockAuthenticator {
   static Future start() async {
     try {
       await _channel.invokeMethod('start');
-    } on PlatformException catch (ex) {
-      throw ex;
+    } on PlatformException {
+      rethrow;
     }
   }
 
@@ -59,13 +59,13 @@ class ForgerockAuthenticator {
   /// the mechanism itself, as the account. After validation the mechanism will be persisted and returned
   static Future<Mechanism> createMechanismFromUri(String uri) async {
     try {
-      var params = <String, dynamic>{
+      final params = <String, dynamic>{
         'uri': uri,
       };
-      var json = await _channel.invokeMethod('createMechanismFromUri', params);
-      return Mechanism.fromJson(_getPlatformData(json), null);
-    } on PlatformException catch (ex) {
-      throw ex;
+      final json = await _channel.invokeMethod('createMechanismFromUri', params);
+      return Mechanism.fromJson(_getPlatformData(json));
+    } on PlatformException {
+      rethrow;
     }
   }
 
@@ -73,9 +73,9 @@ class ForgerockAuthenticator {
   /// This method also retrieves the [Mechanism] objects associated with the accounts.
   static Future<List<Account>> getAllAccounts() async {
     try {
-      List? list = await _channel.invokeMethod('getAllAccounts');
+      final List? list = await _channel.invokeMethod('getAllAccounts');
       if (list != null && list.isNotEmpty) {
-        List<Account> accounts = [];
+        final List<Account> accounts = [];
         for (final element in list) {
           accounts.add(Account.fromJson(_getPlatformData(element)));
         }
@@ -83,14 +83,14 @@ class ForgerockAuthenticator {
       } else {
         return List.empty();
       }
-    } on PlatformException catch (ex) {
-      throw ex;
+    } on PlatformException {
+      rethrow;
     }
   }
 
   /// Update the [Account] object. Returns `false` if it could not be found or updated.
   static Future<bool?> updateAccount(String accountJson) async {
-    var params = <String, dynamic>{
+    final params = <String, dynamic>{
       'accountJson': accountJson,
     };
     return await _channel.invokeMethod('updateAccount', params);
@@ -99,7 +99,7 @@ class ForgerockAuthenticator {
   /// Remove from the storage system the [Account] which id was passed in, all [Mechanism] objects
   /// and any [PushNotification] objects associated with it.
   static Future<bool?> removeAccount(String accountId) async {
-    var params = <String, dynamic>{
+    final params = <String, dynamic>{
       'accountId': accountId,
     };
     return await _channel.invokeMethod('removeAccount', params);
@@ -108,7 +108,7 @@ class ForgerockAuthenticator {
   /// Lock the [Account] which id was passed in, limiting the access to all
   /// [Mechanism] objects and any [PushNotification] objects associated with it.
   static Future<bool?> lockAccount(String accountId, String policyName) async {
-    var params = <String, dynamic>{
+    final params = <String, dynamic>{
       'accountId': accountId,
       'policyName': policyName,
     };
@@ -117,7 +117,7 @@ class ForgerockAuthenticator {
 
   /// Unlock the [Account] which id was passed in.
   static Future<bool?> unlockAccount(String accountId) async {
-    var params = <String, dynamic>{
+    final params = <String, dynamic>{
       'accountId': accountId,
     };
     return await _channel.invokeMethod('unlockAccount', params);
@@ -126,7 +126,7 @@ class ForgerockAuthenticator {
   /// Remove from the storage the [Mechanism] which id was passed in and any [PushNotification] objects
   /// associated with it.
   static Future<bool?> removeMechanism(String mechanismUID) async {
-    var params = <String, dynamic>{
+    final params = <String, dynamic>{
       'mechanismUID': mechanismUID,
     };
     return await _channel.invokeMethod('removeMechanism', params);
@@ -140,10 +140,10 @@ class ForgerockAuthenticator {
   /// Generates a new set of codes for the [OathMechanism] which id was passed in.
   /// Returns an [OathTokenCode] object that contains the currently active token code.
   static Future<OathTokenCode?> getOathTokenCode(String? mechanismId) async {
-    var params = <String, dynamic>{
+    final params = <String, dynamic>{
       'mechanismId': mechanismId,
     };
-    var data = await _channel.invokeMethod('getOathTokenCode', params);
+    final data = await _channel.invokeMethod('getOathTokenCode', params);
     return OathTokenCode.fromJson(_getPlatformData(data));
   }
 
@@ -151,10 +151,10 @@ class ForgerockAuthenticator {
   /// Returns `null` if the notification could not be found.
   static Future<PushNotification?> getNotification(
       String notificationId) async {
-    var params = <String, dynamic>{
+    final params = <String, dynamic>{
       'notificationId': notificationId,
     };
-    var notification = await _channel.invokeMethod('getNotification', params);
+    final notification = await _channel.invokeMethod('getNotification', params);
     if (notification != null) {
       return PushNotification.fromJson(_getPlatformData(notification));
     } else {
@@ -166,10 +166,10 @@ class ForgerockAuthenticator {
   /// which allows accept or deny Push Authentication requests.
   static Future<PushNotification?> handleMessageWithPayload(
       Map<String, dynamic> userInfo) async {
-    var params = <String, dynamic>{
+    final params = <String, dynamic>{
       'userInfo': userInfo,
     };
-    var json = await _channel.invokeMethod('handleMessageWithPayload', params);
+    final json = await _channel.invokeMethod('handleMessageWithPayload', params);
     if (json != null) {
       return PushNotification.fromJson(_getPlatformData(json));
     } else {
@@ -180,8 +180,8 @@ class ForgerockAuthenticator {
   /// Respond a [PushType.DEFAULT] authentication request from a given [PushNotification] received from OpenAM.
   static Future<bool?> performPushAuthentication(
       PushNotification pushNotification, bool accept) async {
-    String notificationId = pushNotification.id;
-    var params = <String, dynamic>{
+    final String notificationId = pushNotification.id;
+    final params = <String, dynamic>{
       'notificationId': notificationId,
       'accept': accept,
     };
@@ -195,8 +195,8 @@ class ForgerockAuthenticator {
       PushNotification pushNotification,
       String challengeResponse,
       bool accept) async {
-    String notificationId = pushNotification.id;
-    var params = <String, dynamic>{
+    final String notificationId = pushNotification.id;
+    final params = <String, dynamic>{
       'notificationId': notificationId,
       'challengeResponse': challengeResponse,
       'accept': accept,
@@ -213,8 +213,8 @@ class ForgerockAuthenticator {
       String title,
       bool allowDeviceCredentials,
       bool accept) async {
-    String notificationId = pushNotification.id;
-    var params = <String, dynamic>{
+    final String notificationId = pushNotification.id;
+    final params = <String, dynamic>{
       'notificationId': notificationId,
       'title': title,
       'allowDeviceCredentials': allowDeviceCredentials,
@@ -228,13 +228,13 @@ class ForgerockAuthenticator {
   /// Returns `null` if no [PushNotification] could be found or the accountId is invalid.
   static Future<List<PushNotification>> getAllNotificationsByAccountId(
       String accountId) async {
-    var params = <String, dynamic>{
+    final params = <String, dynamic>{
       'accountId': accountId,
     };
     try {
-      List? list = await _channel.invokeMethod('getAllNotifications', params);
+      final List? list = await _channel.invokeMethod('getAllNotifications', params);
       if (list != null && list.isNotEmpty) {
-        List<PushNotification> notifications = [];
+        final List<PushNotification> notifications = [];
         for (final element in list) {
           notifications
               .add(PushNotification.fromJson(_getPlatformData(element)));
@@ -243,8 +243,8 @@ class ForgerockAuthenticator {
       } else {
         return List.empty();
       }
-    } on PlatformException catch (ex) {
-      throw ex;
+    } on PlatformException {
+      rethrow;
     }
   }
 
@@ -257,7 +257,7 @@ class ForgerockAuthenticator {
 
   static Future<Mechanism?> getMechanism(String mechanismUID) async {
     try {
-      var mechanismMap =
+      final mechanismMap =
       await _channel.invokeMethod('getAllMechanismsGroupByUID');
           if (mechanismMap.isNotEmpty) {
             final mechanismJson = mechanismMap[mechanismUID];
@@ -266,8 +266,8 @@ class ForgerockAuthenticator {
             }
           }
       return null;
-    } on PlatformException catch (ex) {
-      throw ex;
+    } on PlatformException {
+      rethrow;
     }
   }
 
@@ -275,13 +275,13 @@ class ForgerockAuthenticator {
   /// Returns `null` if no [PushNotification] could be found.
   static Future<List<PushNotification>> getAllNotifications() async {
     try {
-      var mechanismMap =
+      final mechanismMap =
           await _channel.invokeMethod('getAllMechanismsGroupByUID');
-      List? list = await _channel.invokeMethod('getAllNotifications');
+      final List? list = await _channel.invokeMethod('getAllNotifications');
       if (list != null && list.isNotEmpty) {
-        List<PushNotification> notifications = [];
+        final List<PushNotification> notifications = [];
         for (final element in list) {
-          PushNotification pushNotification =
+          final PushNotification pushNotification =
               PushNotification.fromJson(_getPlatformData(element));
           if (mechanismMap.isNotEmpty) {
             final mechanismJson = mechanismMap[pushNotification.mechanismUID];
@@ -297,8 +297,8 @@ class ForgerockAuthenticator {
       } else {
         return List.empty();
       }
-    } on PlatformException catch (ex) {
-      throw ex;
+    } on PlatformException {
+      rethrow;
     }
   }
 
@@ -314,8 +314,8 @@ class ForgerockAuthenticator {
   static Future<bool?> disableScreenshot() async {
     try {
       return await _channel.invokeMethod('disableScreenshot');
-    } on PlatformException catch (ex) {
-      throw ex;
+    } on PlatformException {
+      rethrow;
     }
   }
 
@@ -323,8 +323,8 @@ class ForgerockAuthenticator {
   static Future<bool?> enableScreenshot() async {
     try {
       return await _channel.invokeMethod('enableScreenshot');
-    } on PlatformException catch (ex) {
-      throw ex;
+    } on PlatformException {
+      rethrow;
     }
   }
 
@@ -333,7 +333,7 @@ class ForgerockAuthenticator {
     return await _channel.invokeMethod('removeAllData');
   }
 
-  static _getPlatformData(element) {
+  static dynamic _getPlatformData(element) {
     if (element == null) {
       return null;
     } else if (element is String) {
@@ -350,7 +350,7 @@ class ForgerockAuthenticator {
   static Future<String?> getInitialLink() =>
       _channel.invokeMethod<String?>('getInitialLink');
 
-  static late final Stream<String?> linkStream = _eventChannel
+  static final Stream<String?> linkStream = _eventChannel
       .receiveBroadcastStream()
       .map<String?>((dynamic link) => link as String?);
 
@@ -360,7 +360,7 @@ class ForgerockAuthenticator {
     return Uri.parse(link);
   }
 
-  static late final uriLinkStream = linkStream.transform<Uri?>(
+  static final uriLinkStream = linkStream.transform<Uri?>(
     StreamTransformer<String?, Uri?>.fromHandlers(
       handleData: (String? link, EventSink<Uri?> sink) {
         if (link == null) {

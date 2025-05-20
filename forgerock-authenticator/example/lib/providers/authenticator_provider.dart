@@ -19,24 +19,24 @@ import 'package:forgerock_authenticator/models/push_notification.dart';
 /// and operations required to manage OTP and Push accounts
 class AuthenticatorProvider with ChangeNotifier {
   List<Account> _accountList = <Account>[];
-  Map<String, Account> _accountIndex;
+  Map<String, Account> _accountIndex = <String, Account>{};
 
   void updateAccountIndex() {
     _accountIndex = <String, Account>{};
     for (final Account a in _accountList) {
-      _accountIndex[a.id] = a;
+      _accountIndex[a.id!] = a;
     }
   }
 
   Account getAccount(String accountId) {
-    return _accountIndex[accountId];
+    return _accountIndex[accountId]!;
   }
 
   static Future<void> initialize() async {
     try {
       await ForgerockAuthenticator.start();
     } on PlatformException catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -53,21 +53,17 @@ class AuthenticatorProvider with ChangeNotifier {
 
   Future<Mechanism> addAccount(String uri) async {
     try {
-      final Mechanism mechanism =
-          await ForgerockAuthenticator.createMechanismFromUri(uri);
-      if (mechanism != null) {
-        getAllAccounts();
-      }
+      final Mechanism mechanism = await ForgerockAuthenticator.createMechanismFromUri(uri);
+      getAllAccounts();
       return mechanism;
     } on PlatformException catch (e) {
       if (e.code == ForgerockAuthenticator.DuplicateMechanismException) {
-        return Future<Mechanism>.error(DuplicateMechanismException(e.details, e.message));
+        return Future<Mechanism>.error(DuplicateMechanismException(e.details, e.message ?? ''));
       }
       if (e.code == ForgerockAuthenticator.CreateMechanismException) {
         return Future<Mechanism>.error(MechanismCreationException(e.message));
       } else if (e.code == ForgerockAuthenticator.PolicyViolationException) {
-        return Future<Mechanism>.error(
-            PolicyViolationException(e.details, e.message));
+        return Future<Mechanism>.error(PolicyViolationException(e.details, e.message ?? ''));
       } else {
         return Future<Mechanism>.error(e);
       }
@@ -75,14 +71,14 @@ class AuthenticatorProvider with ChangeNotifier {
   }
 
   Future<bool> removeAccount(String accountId) async {
-    final bool success = await ForgerockAuthenticator.removeAccount(accountId);
+    final bool success = (await ForgerockAuthenticator.removeAccount(accountId) ?? false);
     if (success) {
       getAllAccounts();
     }
     return success;
   }
 
-  Future<OathTokenCode> getOathTokenCode(String mechanismId) async {
+  Future<OathTokenCode?> getOathTokenCode(String mechanismId) async {
     try {
       return ForgerockAuthenticator.getOathTokenCode(mechanismId);
     } on PlatformException catch (e) {
@@ -94,11 +90,12 @@ class AuthenticatorProvider with ChangeNotifier {
     }
   }
 
-  static Future<bool> performPushAuthentication(
-      PushNotification pushNotification, bool accept) async {
+  static Future<bool?> performPushAuthentication(PushNotification pushNotification, bool accept) async {
     try {
       return ForgerockAuthenticator.performPushAuthentication(
-          pushNotification, accept);
+        pushNotification,
+        accept,
+      );
     } on PlatformException catch (e) {
       if (e.code == ForgerockAuthenticator.AccountLockException) {
         return Future<bool>.error(AccountLockException(e.message));
@@ -110,13 +107,14 @@ class AuthenticatorProvider with ChangeNotifier {
     }
   }
 
-  static Future<bool> performPushAuthenticationWithChallenge(
-      PushNotification pushNotification,
-      String challengeResponse,
-      bool accept) async {
+  static Future<bool?> performPushAuthenticationWithChallenge(
+      PushNotification pushNotification, String challengeResponse, bool accept) async {
     try {
       return ForgerockAuthenticator.performPushAuthenticationWithChallenge(
-          pushNotification, challengeResponse, accept);
+        pushNotification,
+        challengeResponse,
+        accept,
+      );
     } on PlatformException catch (e) {
       if (e.code == ForgerockAuthenticator.AccountLockException) {
         return Future<bool>.error(AccountLockException(e.message));
@@ -128,14 +126,15 @@ class AuthenticatorProvider with ChangeNotifier {
     }
   }
 
-  static Future<bool> performPushAuthenticationWithBiometric(
-      PushNotification pushNotification,
-      String title,
-      bool allowDeviceCredentials,
-      bool accept) async {
+  static Future<bool?> performPushAuthenticationWithBiometric(
+      PushNotification pushNotification, String title, bool allowDeviceCredentials, bool accept) async {
     try {
       return ForgerockAuthenticator.performPushAuthenticationWithBiometric(
-          pushNotification, title, allowDeviceCredentials, accept);
+        pushNotification,
+        title,
+        allowDeviceCredentials,
+        accept,
+      );
     } on PlatformException catch (e) {
       if (e.code == ForgerockAuthenticator.AccountLockException) {
         return Future<bool>.error(AccountLockException(e.message));

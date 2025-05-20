@@ -18,7 +18,7 @@ void main() {
 
   group('Mechanism tests', () {
     test('returns a HOTP Mechanism if parse completes successfully', () async {
-        OathMechanism oathMechanism = Mechanism.fromJson(jsonDecode(hotpMechanismJson)) as OathMechanism;
+        final OathMechanism oathMechanism = Mechanism.fromJson(jsonDecode(hotpMechanismJson)) as OathMechanism;
         expect(oathMechanism.id, 'issuer1-user1-otpauth');
         expect(oathMechanism.mechanismUID, 'c112b325-ac22-37f1-aae6-c12cf411cf80');
         expect(oathMechanism.accountName, 'user1');
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('returns a TOTP Mechanism if parse completes successfully', () async {
-      OathMechanism oathMechanism = Mechanism.fromJson(jsonDecode(totpMechanismJson)) as OathMechanism;
+      final OathMechanism oathMechanism = Mechanism.fromJson(jsonDecode(totpMechanismJson)) as OathMechanism;
       expect(oathMechanism.id, 'issuer1-user1-otpauth');
       expect(oathMechanism.mechanismUID, 'b162b325-ebb1-48e0-8ab7-b38cf341da95');
       expect(oathMechanism.accountName, 'user1');
@@ -44,7 +44,7 @@ void main() {
     });
 
     test('returns a Push Mechanism if parse completes successfully', () async {
-      PushMechanism pushMechanism = Mechanism.fromJson(jsonDecode(pushMechanismJson)) as PushMechanism;
+      final PushMechanism pushMechanism = Mechanism.fromJson(jsonDecode(pushMechanismJson)) as PushMechanism;
       expect(pushMechanism.id, 'issuer1-user1-pushauth');
       expect(pushMechanism.mechanismUID, '0585ace6-6e91-42bb-9a65-2f48f5212a20');
       expect(pushMechanism.accountName, 'user1');
@@ -54,7 +54,7 @@ void main() {
     });
 
     test('returns an JSON representation of the Mechanism object successfully', () async {
-      Mechanism mechanism = Mechanism.fromJson(jsonDecode(hotpMechanismJson));
+      final Mechanism mechanism = Mechanism.fromJson(jsonDecode(hotpMechanismJson));
       final Map<String, dynamic> jsonMap = mechanism.toJson();
       expect(jsonMap['id'], 'issuer1-user1-otpauth');
       expect(jsonMap['accountName'], 'user1');
@@ -64,7 +64,7 @@ void main() {
     });
 
     test('returns an JSON representation of the OathMechanism object successfully', () async {
-      OathMechanism mechanism = Mechanism.fromJson(jsonDecode(hotpMechanismJson)) as OathMechanism;
+      final OathMechanism mechanism = Mechanism.fromJson(jsonDecode(hotpMechanismJson)) as OathMechanism;
       final Map<String, dynamic> jsonMap = mechanism.toJson();
       expect(jsonMap['id'], 'issuer1-user1-otpauth');
       expect(jsonMap['accountName'], 'user1');
@@ -76,7 +76,7 @@ void main() {
     });
 
     test('returns an JSON representation of the PushMechanism object successfully', () async {
-      PushMechanism mechanism = Mechanism.fromJson(jsonDecode(pushMechanismJson)) as PushMechanism;
+      final PushMechanism mechanism = Mechanism.fromJson(jsonDecode(pushMechanismJson)) as PushMechanism;
       final Map<String, dynamic> jsonMap = mechanism.toJson();
       expect(jsonMap['id'], 'issuer1-user1-pushauth');
       expect(jsonMap['accountName'], 'user1');
@@ -87,7 +87,7 @@ void main() {
     });
 
     test('returns String representation of the Mechanism', () async {
-      Mechanism mechanism = Mechanism.fromJson(jsonDecode(totpMechanismJson));
+      final Mechanism mechanism = Mechanism.fromJson(jsonDecode(totpMechanismJson));
       const String mechanismString = '{"id":"issuer1-user1-otpauth","issuer":"issuer1","accountName":"user1","mechanismUID":"b162b325-ebb1-48e0-8ab7-b38cf341da95","oathType":"TOTP","type":"otpauth","algorithm":"sha1","secret":"REMOVED","digits":6,"counter":null,"period":30,"timeAdded":null}';
       expect(mechanism.toString(), mechanismString);
     });

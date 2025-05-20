@@ -38,11 +38,11 @@ class ForgerockPushConnector {
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case 'onToken':
-        print('onToken: ${call.arguments}');
+        debugPrint('onToken: ${call.arguments}');
         _token.value = call.arguments;
         return null;
       case 'onMessage':
-        print('onMessage: ${call.arguments}');
+        debugPrint('onMessage: ${call.arguments}');
         _pendingNotification.value = call.arguments;
         return null;
       default:

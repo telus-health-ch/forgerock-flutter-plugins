@@ -6,14 +6,12 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:forgerock_authenticator/models/oath_token_code.dart';
 import 'package:forgerock_authenticator/models/account.dart';
 import 'package:forgerock_authenticator/models/oath_mechanism.dart';
+import 'package:forgerock_authenticator/models/oath_token_code.dart';
 import 'package:forgerock_authenticator_example/providers/authenticator_provider.dart';
-
-import 'count_down_timer.dart';
+import 'package:forgerock_authenticator_example/widgets/count_down_timer.dart';
+import 'package:provider/provider.dart';
 
 /// This widget is used with OATH accounts to display an [OathTokenCode].
 class AccountDetail extends StatefulWidget {
@@ -26,8 +24,8 @@ class AccountDetail extends StatefulWidget {
 }
 
 class _AccountDetailState extends State<AccountDetail> {
-  Future<OathTokenCode> _oathTokenCode;
-  int _duration;
+  late Future<OathTokenCode?> _oathTokenCode;
+  late int _duration;
 
   Account get account => widget.account;
 
@@ -49,48 +47,46 @@ class _AccountDetailState extends State<AccountDetail> {
     return FutureBuilder(
         future: _oathTokenCode,
         builder: (context, snapshot) {
-          if(snapshot.hasData) {
-            if(_duration == 0) {
-              _duration = _getDuration(snapshot.data);
+          if (snapshot.hasData) {
+            if (_duration == 0) {
+              _duration = _getDuration(snapshot.data!);
             }
             return Row(
               children: [
                 Column(
                   children: [
-                    Text(
-                        _formartCode(snapshot.data),
-                        style: TextStyle(fontSize: 32, color: Colors.black)
-                    )
+                    Text(_formartCode(snapshot.data!), style: const TextStyle(fontSize: 32, color: Colors.black))
                   ],
                 ),
                 Column(
                   children: [
                     Container(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: _displayOTPAction(context, snapshot.data),
+                      child: _displayOTPAction(context, snapshot.data!),
                     )
                   ],
                 )
               ],
             );
           } else {
-            return Container(height: 0,width: 0,);
+            return const SizedBox(
+              height: 0,
+              width: 0,
+            );
           }
         });
   }
 
   Widget _displayOTPAction(BuildContext context, OathTokenCode oathTokenCode) {
-    if(oathTokenCode.oathType == TokenType.TOTP) {
+    if (oathTokenCode.oathType == TokenType.TOTP) {
       return Container(
-        padding: const EdgeInsets.fromLTRB(6, 0, 0, 0),
-        child: CountDownTimer(
-          timeTotal: _getDuration(oathTokenCode),
-          timeRemaining: _getSecondsLeft(oathTokenCode),
-          width: 38,
-          height: 38,
-          onComplete: refresh
-        )
-      );
+          padding: const EdgeInsets.fromLTRB(6, 0, 0, 0),
+          child: CountDownTimer(
+              timeTotal: _getDuration(oathTokenCode),
+              timeRemaining: _getSecondsLeft(oathTokenCode),
+              width: 38,
+              height: 38,
+              onComplete: refresh));
     } else {
       return SizedBox(
           height: 38.0,
@@ -100,29 +96,31 @@ class _AccountDetailState extends State<AccountDetail> {
             color: Colors.grey,
             icon: const Icon(Icons.refresh, size: 42.0),
             onPressed: refresh,
-          )
-      );
+          ));
     }
   }
 
-  Future<OathTokenCode> _getNextOathTokenCode() async {
-    return await Provider.of<AuthenticatorProvider>(context, listen: false)
-        .getOathTokenCode(account.getOathMechanism().id);
+  Future<OathTokenCode?> _getNextOathTokenCode() async {
+    if (account.getOathMechanism()?.id case final id?) {
+      return await Provider.of<AuthenticatorProvider>(context, listen: false).getOathTokenCode(id);
+    } else {
+      return null;
+    }
   }
 
   String _formartCode(OathTokenCode oathTokenCode) {
-    String code = oathTokenCode.code;
-    int half = (code.length ~/ 2);
-    return code.substring(0, half) + " " + code.substring(half, code.length);
+    final String code = oathTokenCode.code ?? '';
+    final int half = code.length ~/ 2;
+    return "${code.substring(0, half)} ${code.substring(half, code.length)}";
   }
 
   int _getSecondsLeft(OathTokenCode oathTokenCode) {
-    int cur = DateTime.now().millisecondsSinceEpoch;
-    int total = oathTokenCode.until - oathTokenCode.start;
-    int state = cur - oathTokenCode.start;
-    int secondsLeft = ((total - state) ~/ 1000)+1;
+    final int cur = DateTime.now().millisecondsSinceEpoch;
+    final int total = (oathTokenCode.until ?? 0) - (oathTokenCode.start ?? 0);
+    final int state = cur - (oathTokenCode.start ?? 0);
+    final int secondsLeft = ((total - state) ~/ 1000) + 1;
 
-    if(0 <= secondsLeft) {
+    if (0 <= secondsLeft) {
       return secondsLeft;
     } else {
       return 1;
@@ -130,7 +128,6 @@ class _AccountDetailState extends State<AccountDetail> {
   }
 
   int _getDuration(OathTokenCode oathTokenCode) {
-    return (oathTokenCode.until - oathTokenCode.start) ~/ 1000;
+    return ((oathTokenCode.until ?? 0) - (oathTokenCode.start ?? 0)) ~/ 1000;
   }
-
 }

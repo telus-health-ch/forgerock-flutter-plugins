@@ -28,12 +28,12 @@ class ActionsMenu extends StatelessWidget {
       },
       itemBuilder: (BuildContext ctx) =>
       [
-        PopupMenuItem(
+        const PopupMenuItem(
+            value: 'edit',
             child: ListTile(
               leading: Icon(Icons.edit),
               title: Text('Edit Accounts'),
-            ),
-            value: 'edit'
+            )
         ),
       ]
     );

@@ -12,8 +12,8 @@ class DuplicateMechanismException implements Exception {
 
   DuplicateMechanismException(String mechanismId,
       [String message = 'This authentication method is already registered.']) {
-    this._message = message;
-    this._mechanismId = mechanismId;
+    _message = message;
+    _mechanismId = mechanismId;
   }
 
   @override
@@ -33,9 +33,9 @@ class MechanismCreationException implements Exception {
 
   MechanismCreationException([String? message]) {
     if (message != null) {
-      this._message = 'Error registering new MFA account:\n $message';
+      _message = 'Error registering new MFA account:\n $message';
     } else {
-      this._message = 'Error registering new MFA account.';
+      _message = 'Error registering new MFA account.';
     }
   }
 
@@ -51,10 +51,10 @@ class HandleNotificationException implements Exception {
 
   HandleNotificationException([String? message]) {
     if (message != null) {
-      this._message =
+      _message =
           'Error processing Push Authentication request:\n $message';
     } else {
-      this._message = 'Error processing Push Authentication request.';
+      _message = 'Error processing Push Authentication request.';
     }
   }
 
@@ -70,9 +70,9 @@ class AccountLockException implements Exception {
 
   AccountLockException([String? message]) {
     if (message != null) {
-      this._message = 'Account is locked:\n $message';
+      _message = 'Account is locked:\n $message';
     } else {
-      this._message = 'This action cannot be performed. Account is locked.';
+      _message = 'This action cannot be performed. Account is locked.';
     }
   }
 
@@ -90,8 +90,8 @@ class PolicyViolationException implements Exception {
   PolicyViolationException(String policy,
       [String message =
           'The account cannot be registered on this device. It violates some policy']) {
-    this._message = message;
-    this._policyName = policy;
+    _message = message;
+    _policyName = policy;
   }
 
   @override

@@ -19,17 +19,15 @@ extension PushTypeExtension on PushType {
         return "challenge";
       case PushType.BIOMETRIC:
         return "biometric";
-      default:
-        return "";
     }
   }
 
   /// Compare PushType with given value.
   bool isEqual(dynamic typeValue) {
     if (typeValue is String) {
-      return this.toString() == typeValue || this.value == typeValue;
+      return toString() == typeValue || value == typeValue;
     } else if (typeValue is PushType) {
-      return this.value == typeValue.value;
+      return value == typeValue.value;
     } else {
       return false;
     }

@@ -17,7 +17,7 @@ void main() {
 
   group('OathTokenCode tests', () {
     test('returns a OathTokenCode if parse completes successfully', () async {
-      OathTokenCode? oathTokenCode = OathTokenCode.fromJson(jsonDecode(oathTokenCodeJson));
+      final OathTokenCode oathTokenCode = OathTokenCode.fromJson(jsonDecode(oathTokenCodeJson));
       expect(oathTokenCode.oathType, TokenType.HOTP);
       expect(oathTokenCode.start, 10000);
       expect(oathTokenCode.until, 10030);
@@ -25,7 +25,7 @@ void main() {
     });
 
     test('returns an JSON representation of the OathTokenCode object successfully', () async {
-      OathTokenCode? oathTokenCode = OathTokenCode.fromJson(jsonDecode(oathTokenCodeJson));
+      final OathTokenCode oathTokenCode = OathTokenCode.fromJson(jsonDecode(oathTokenCodeJson));
       final Map<String, dynamic> jsonMap = oathTokenCode.toJson();
       expect(jsonMap['oathType'], 'HOTP');
       expect(jsonMap['code'], '123456');
@@ -34,7 +34,7 @@ void main() {
     });
 
     test('returns String representation of the Mechanism', () async {
-      OathTokenCode? oathTokenCode = OathTokenCode.fromJson(jsonDecode(oathTokenCodeJson));
+      final OathTokenCode oathTokenCode = OathTokenCode.fromJson(jsonDecode(oathTokenCodeJson));
       const String oathTokenCodeString = '{"code":"123456","start":10000,"until":10030,"oathType":"HOTP"}';
       expect(oathTokenCode.toString(), oathTokenCodeString);
     });
